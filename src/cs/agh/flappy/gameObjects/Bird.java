@@ -35,12 +35,7 @@ public class Bird extends GameObject {
         setPosition(new Position(3, getScene().getCamera().getHeight() >> 1));
         input = getScene().getInput();
         pipeCreator = getScene().getGameObjectsOfType(PipeCreator.class).get(0);
-        scoreLabel = new Label("0") {
-            @Override
-            public void update(double delta) {
-                setPosition(getPosition().add(30 * delta, 0));
-            }
-        };
+        scoreLabel = new Label("0");
         getScene().addGameObject(scoreLabel);
         scoreLabel.addComponent(new Follower(mainCamera, mainCamera.getWidth() - 4, mainCamera.getHeight() - 3));
 
