@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FlappyTerminal:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FlappyTerminal_jar</output-path>
+    <root id="archive" name="FlappyTerminal.jar">
+      <element id="module-output" name="FlappyTerminal" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jline/jline/3.9.0/jline-3.9.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

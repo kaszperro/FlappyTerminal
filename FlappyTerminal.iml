@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="org.fusesource.jansi:jansi:1.17.1" level="project" />
+    <orderEntry type="library" name="org.jline:jline:3.9.0" level="project" />
   </component>
 </module>
