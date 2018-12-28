@@ -27,10 +27,9 @@ public class Follower extends GameComponent {
 
 
     @Override
-    public void update() {
+    protected void update(double delta) {
         Position followerPosition = toFollow.getPosition();
-        Position currentPos = getGameObject().getPosition();
-        Position newPosition = currentPos;
+        Position newPosition = getGameObject().getPosition();
         if (xFollow) {
             newPosition = new Position(followerPosition.getX() + xOffset, newPosition.getY());
         }

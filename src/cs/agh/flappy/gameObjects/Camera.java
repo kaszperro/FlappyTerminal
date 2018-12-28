@@ -27,20 +27,20 @@ public class Camera extends GameObject {
 
     }
 
-    public String getImage(Scene scene) throws IOException {
+    public String getImage(Scene scene) {
         List<Renderer> rendererList = scene.getComponentsOfType(Renderer.class);
         StringBuilder builder = new StringBuilder();
         for (int h = 1; h <= height; ++h) {
             for (int w = 0; w < width; ++w) {
-                double x = w + getPosition().getX();
-                double y = height - h + getPosition().getY();
+                double x = w + getWordPosition().getX();
+                double y = height - h + getWordPosition().getY();
 
                 char myChar = ' ';
                 int zPos = -1;
 
                 for (Renderer renderer : rendererList) {
                     GameObject gameObject = renderer.getGameObject();
-                    Position objAnchor = gameObject.getPosition().add(renderer.getAnchor());
+                    Position objAnchor = gameObject.getWordPosition().add(renderer.getAnchor());
                     Position relative = new Position(x, y).sub(objAnchor);
                     GameObject renGameO = renderer.getGameObject();
 

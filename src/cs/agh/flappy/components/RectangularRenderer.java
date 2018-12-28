@@ -50,7 +50,7 @@ public class RectangularRenderer extends Renderer {
     }
 
     @Override
-    public void update() {
+    protected void update(double delta) {
 
     }
 }

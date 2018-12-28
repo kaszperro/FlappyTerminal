@@ -22,7 +22,7 @@ public class Scene {
     private List<GameObject> gameObjectsToDestroy = new LinkedList<>();
     private Camera mainCamera;
 
-    private Instant previousTime = null;
+
     private SceneManager sceneManager = null;
 
 
@@ -86,8 +86,8 @@ public class Scene {
 
     private void updateObjects() {
         for (GameObject object : gameObjectsList) {
-            double duration = Duration.between(previousTime, Instant.now()).toNanos();
-            object.update(duration / 1e9);
+
+            object.update();
         }
     }
 
@@ -136,18 +136,16 @@ public class Scene {
         this.sceneManager = sceneManager;
         addCachedGameObjects();
         startObjects();
-        previousTime = Instant.now();
-
     }
 
-    public void runFrame(Terminal terminal) throws IOException, InterruptedException {
+    public void runFrame(Terminal terminal) throws InterruptedException {
         addCachedGameObjects();
-        updateComponents();
         destroyFromList();
         updateObjects();
+        updateComponents();
         render(terminal);
-        previousTime = Instant.now();
-        Thread.sleep(2);
+
+        //Thread.sleep(2);
     }
 
 
@@ -156,7 +154,7 @@ public class Scene {
     }
 
 
-    private void render(Terminal terminal) throws IOException {
+    private void render(Terminal terminal) {
         terminal.writer().print(ansi().cursorUp(mainCamera.getHeight()).cursorLeft(mainCamera.getWidth()));
         terminal.writer().print(ansi().a(mainCamera.getImage(this)));
     }
@@ -166,7 +164,6 @@ public class Scene {
         gameObjectsList.clear();
         cacheGameObjects.clear();
         mainCamera = null;
-        previousTime = null;
     }
 
     public SceneManager getSceneManager() {

@@ -56,17 +56,15 @@ public class Collider extends GameComponent {
 
 
     public boolean collides(Collider other) {
-        Position myPosition = this.getGameObject().getPosition().add(anchor);
-        Position otherPosition = other.getGameObject().getPosition().add(other.getAnchor());
+        Position myPosition = this.getGameObject().getWordPosition().add(anchor);
+        Position otherPosition = other.getGameObject().getWordPosition().add(other.getAnchor());
         float otherWidth = other.getWidth();
         float otherHeight = other.getHeight();
 
         Position myTopRight = myPosition.add(width - 1, height - 1);
-
         Position otherTopRight = otherPosition.add(otherWidth - 1, otherHeight - 1);
 
-
-        if (myTopRight.getY() < otherPosition.getY() || myPosition.getY() > otherTopRight.getY())
+        if (otherPosition.getY() - myTopRight.getY() > 0.5 || myPosition.getY() - otherTopRight.getY() > 0.5)
             return false;
 
         return !(myTopRight.getX() < otherPosition.getX()) && !(myPosition.getX() > otherTopRight.getX());
@@ -84,7 +82,7 @@ public class Collider extends GameComponent {
 
 
     @Override
-    public void update() {
+    protected void update(double delta) {
         if (onCollision != null) {
             List<Collider> colliderList = getGameObject().getScene().getComponentsOfType(Collider.class);
             for (Collider other : colliderList) {

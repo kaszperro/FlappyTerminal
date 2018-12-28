@@ -55,7 +55,7 @@ public class PipeCreator extends GameObject {
     }
 
     @Override
-    public void update(double delta) {
+    protected void update(double delta) {
         double lastPos = mainCamera.getWidth() + mainCamera.getPosition().getX();
         if (!pipeList.isEmpty()) {
             lastPos = pipeList.get(pipeList.size() - 1).getPosition().getX();
@@ -81,7 +81,7 @@ public class PipeCreator extends GameObject {
 
         for (Iterator<Pipe> iter = pipeList.listIterator(); iter.hasNext(); ) {
             Pipe a = iter.next();
-            if (a.getPosition().getX() + pipesWidth < mainCamera.getPosition().getX()) {
+            if (a.getPosition().getX() + pipesWidth < mainCamera.getWordPosition().getX()) {
                 a.destroy();
                 iter.remove();
             } else {

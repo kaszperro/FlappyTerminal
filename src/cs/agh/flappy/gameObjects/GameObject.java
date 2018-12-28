@@ -4,6 +4,8 @@ import cs.agh.flappy.Position;
 import cs.agh.flappy.scenes.Scene;
 import cs.agh.flappy.components.GameComponent;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,14 +14,26 @@ public class GameObject {
     private List<GameComponent> componentsList = new LinkedList<>();
     private Position position = new Position();
     private Scene scene = null;
-
     private int zPos = 0;
+    private Instant lastUpdated = null;
+    private GameObject parent = null;
 
     public void setScene(Scene scene) {
         this.scene = scene;
     }
 
-    public void update(double delta) {
+    public final void update() {
+        if (lastUpdated == null) {
+            lastUpdated = Instant.now();
+        }
+
+        Instant now = Instant.now();
+        double duration = Duration.between(lastUpdated, now).toNanos();
+        lastUpdated = now;
+        update(duration / 1e9);
+    }
+
+    protected void update(double delta) {
     }
 
     public void start() {
@@ -70,6 +84,26 @@ public class GameObject {
 
     public <T extends GameComponent> void removeComponent(Class<T> myClass) {
         componentsList.removeIf(component -> myClass.isInstance(component.getClass()));
+    }
+
+    public void setParent(GameObject parent) {
+        this.parent = parent;
+    }
+
+    public GameObject getParent() {
+        return parent;
+    }
+
+    public Position getWordPosition() {
+        if (getParent() == null) {
+            return getPosition();
+        }
+        return getPosition().add(getParent().getWordPosition());
+    }
+
+    public void addChild(GameObject child) {
+        getScene().addGameObject(child);
+        child.setParent(this);
     }
 }
 

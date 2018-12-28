@@ -12,7 +12,7 @@ public class RunningCamera extends Camera {
 
 
     @Override
-    public void update(double delta) {
+    protected void update(double delta) {
         Position myPos = getPosition();
         setPosition(myPos.add(speed * delta, 0));
     }

@@ -6,13 +6,10 @@ import cs.agh.flappy.components.Collider;
 import cs.agh.flappy.components.Follower;
 import cs.agh.flappy.components.RectangularRenderer;
 import cs.agh.flappy.scenes.GameOverScene;
-import cs.agh.flappy.scenes.Scene;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class Bird extends GameObject {
-    private double time = 0;
     private Input input;
     private PipeCreator pipeCreator;
     private Label scoreLabel;
@@ -22,11 +19,19 @@ public class Bird extends GameObject {
     private int width;
     private int height;
 
+
+    private double time;
+    private Position startPos;
+    private double downForce = 10;
+
+    public void resetGravity() {
+        time = 0;
+        startPos = getPosition();
+    }
+
     public Bird(int width, int height) {
         this.width = width;
         this.height = height;
-
-
     }
 
     @Override
@@ -50,22 +55,23 @@ public class Bird extends GameObject {
         RectangularRenderer renderer = new RectangularRenderer(width, height);
         addComponent(renderer);
 
-        addComponent(new Follower(mainCamera, 3));
+        resetGravity();
         score = 0;
     }
 
     @Override
-    public void update(double delta) {
-
+    protected void update(double delta) {
         if (input.getPressed() == 65) {
             setPosition(getPosition().add(0, 10 * delta));
-            time = 0;
+            resetGravity();
         } else {
-            setPosition(getPosition().add(0, -(time * time) / 2));
-            time += delta;
+            double posX = getPosition().getX();
+            double posY = startPos.getY() - downForce * time * time / 2;
+            setPosition(new Position(posX, posY));
         }
+        time += delta;
 
-        Pipe newPipe = pipeCreator.getOverPipe(getPosition().getX());
+        Pipe newPipe = pipeCreator.getOverPipe(getWordPosition().getX());
         if (newPipe != null && newPipe != currentPipe) {
             score += 1;
         }

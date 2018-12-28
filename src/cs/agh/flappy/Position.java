@@ -48,27 +48,25 @@ public class Position {
     }
 
     public Position add(Position other) {
-        return new Position(x + other.x, y + other.y);
+        return add(other.getX(), other.getY());
     }
 
     public Position add(double x, double y) {
-        return this.add(new Position(x, y));
-    }
-
-    public Position sub(double x, double y) {
-        return this.sub(new Position(x, y));
+        return new Position(x + this.x, y + this.y);
     }
 
     public Position sub(Position other) {
-        return new Position(x - other.x, y - other.y);
+        return sub(other.getX(), other.getY());
+    }
+
+    public Position sub(double x, double y) {
+        return new Position(this.x - x, this.y - y);
     }
 
     public boolean equals(Object other) {
         if (!(other instanceof Position))
             return false;
         Position that = (Position) other;
-        if (x == that.x && y == that.y)
-            return true;
-        return false;
+        return x == that.x && y == that.y;
     }
 }

@@ -41,7 +41,6 @@ public class SceneManager {
                 } catch (InterruptedException e) {
                     myScene.stopScene();
                     Thread.currentThread().interrupt();
-                } catch (IOException ignored) {
                 }
             }
         }
