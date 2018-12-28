@@ -12,7 +12,7 @@ public class Input implements Runnable {
     private AtomicInteger myCharCode = new AtomicInteger();
     private NonBlockingReader reader;
 
-    Input(NonBlockingReader reader) {
+    public Input(NonBlockingReader reader) {
         this.reader = reader;
 
 

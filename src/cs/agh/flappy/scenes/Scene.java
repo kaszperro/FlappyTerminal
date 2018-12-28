@@ -1,5 +1,6 @@
-package cs.agh.flappy;
+package cs.agh.flappy.scenes;
 
+import cs.agh.flappy.Input;
 import cs.agh.flappy.components.GameComponent;
 import cs.agh.flappy.gameObjects.Camera;
 import cs.agh.flappy.gameObjects.GameObject;
@@ -7,64 +8,33 @@ import org.fusesource.jansi.AnsiConsole;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import java.awt.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class Scene {
-    class Pair<T, V> {
-        T first;
-        V second;
-
-        Pair(T t, V v) {
-            first = t;
-            second = v;
-        }
-
-        public T getFirst() {
-            return first;
-        }
-
-        public V getSecond() {
-            return second;
-        }
-    }
-
-
     private List<GameObject> gameObjectsList = new LinkedList<>();
     private List<GameObject> cacheGameObjects = new LinkedList<>();
+    private List<GameObject> gameObjectsToDestroy = new LinkedList<>();
     private Camera mainCamera;
-    public Terminal terminal;
-    public Input input;
 
-    Instant previousTime;
+    private Instant previousTime = null;
+    private SceneManager sceneManager = null;
 
-    Scene(Camera camera) throws IOException {
-        AnsiConsole.systemInstall();
+
+    public void addCamera(Camera camera) {
         this.mainCamera = camera;
-        addGameObject(camera);
-
-        Terminal terminal = TerminalBuilder.builder()
-                .jna(true)
-                .system(true)
-                .build();
-        terminal.enterRawMode();
-
-        this.terminal = terminal;
-
-        input = new Input(terminal.reader());
-        Thread inputThread = new Thread(input);
-        inputThread.start();
-
-        terminal.writer().print(ansi().a(camera.getEmptyImage()));
+        addGameObject(mainCamera);
     }
+
+    public Input getInput() {
+        return sceneManager.getInput();
+    }
+
 
     public void addGameObject(GameObject gameObject) {
         cacheGameObjects.add(gameObject);
@@ -72,9 +42,17 @@ public class Scene {
     }
 
 
-    public void addCachedGameObjects() {
+    private void addCachedGameObjects() {
         gameObjectsList.addAll(cacheGameObjects);
         cacheGameObjects.clear();
+    }
+
+    public void destroyGameObject(GameObject gameObject) {
+        gameObjectsToDestroy.add(gameObject);
+    }
+
+    private void destroyFromList() {
+        gameObjectsToDestroy.removeIf(gameObject -> gameObjectsList.remove(gameObject));
     }
 
     public <T extends GameObject> List<T> getGameObjectOfType(Class<T> myClass) {
@@ -118,27 +96,32 @@ public class Scene {
             object.start();
         }
     }
-
+/*
     public void run() throws IOException {
         addCachedGameObjects();
         startObjects();
 
         previousTime = Instant.now();
-        /*Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+
+        Thread runThread = new Thread() {
             @Override
             public void run() {
-                updateObjects();
-                previousTime = Instant.now();
+
+                synchronized (isRunning) {
+
+                }
+
+                super.run();
             }
-        }, 0, 3);*/
+        };
+        runThread.start();
 
-
-        while (true) {
+        while (isRunning) {
             addCachedGameObjects();
             updateComponents();
-            render();
+            destroyFromList();
             updateObjects();
+            render();
             previousTime = Instant.now();
             try {
                 Thread.sleep(3);
@@ -146,17 +129,53 @@ public class Scene {
                 e.printStackTrace();
             }
         }
+    }
+    */
 
+    public void startScene(SceneManager sceneManager) {
+        this.sceneManager = sceneManager;
+        addCachedGameObjects();
+        startObjects();
+        previousTime = Instant.now();
 
     }
+
+    public void runFrame(Terminal terminal) throws IOException, InterruptedException {
+        addCachedGameObjects();
+        updateComponents();
+        destroyFromList();
+        updateObjects();
+        render(terminal);
+        previousTime = Instant.now();
+        Thread.sleep(2);
+    }
+
 
     public Camera getCamera() {
         return mainCamera;
     }
 
 
-    private void render() throws IOException {
+    private void render(Terminal terminal) throws IOException {
         terminal.writer().print(ansi().cursorUp(mainCamera.getHeight()).cursorLeft(mainCamera.getWidth()));
         terminal.writer().print(ansi().a(mainCamera.getImage(this)));
     }
+
+
+    public void stopScene() {
+        gameObjectsList.clear();
+        cacheGameObjects.clear();
+        mainCamera = null;
+        previousTime = null;
+    }
+
+    public SceneManager getSceneManager() {
+        return sceneManager;
+    }
+
+    public void writeEmptyImage(Terminal terminal) {
+        terminal.writer().print(ansi().a(mainCamera.getEmptyImage()));
+    }
 }
+
+

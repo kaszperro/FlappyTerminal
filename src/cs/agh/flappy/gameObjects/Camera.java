@@ -1,7 +1,7 @@
 package cs.agh.flappy.gameObjects;
 
 import cs.agh.flappy.Position;
-import cs.agh.flappy.Scene;
+import cs.agh.flappy.scenes.Scene;
 import cs.agh.flappy.components.Renderer;
 
 import java.io.IOException;
@@ -28,24 +28,25 @@ public class Camera extends GameObject {
     }
 
     public String getImage(Scene scene) throws IOException {
-
-
         List<Renderer> rendererList = scene.getComponentsOfType(Renderer.class);
         StringBuilder builder = new StringBuilder();
         for (int h = 1; h <= height; ++h) {
-            for (int w = 1; w <= width; ++w) {
+            for (int w = 0; w < width; ++w) {
                 double x = w + getPosition().getX();
                 double y = height - h + getPosition().getY();
 
                 char myChar = ' ';
+                int zPos = -1;
 
                 for (Renderer renderer : rendererList) {
                     GameObject gameObject = renderer.getGameObject();
                     Position objAnchor = gameObject.getPosition().add(renderer.getAnchor());
                     Position relative = new Position(x, y).sub(objAnchor);
+                    GameObject renGameO = renderer.getGameObject();
 
-                    if (renderer.isPositionInside(relative)) {
+                    if (renderer.isPositionInside(relative) && renGameO.getzPos() > zPos) {
                         myChar = renderer.getCharAtPosition(relative);
+                        zPos = renGameO.getzPos();
                     }
                 }
 
@@ -65,12 +66,5 @@ public class Camera extends GameObject {
             builder.append("\n");
         }
         return builder.toString();
-    }
-
-
-    @Override
-    public void update(double delta) {
-        Position myPos = getPosition();
-        setPosition(myPos.add(30*delta, 0));
     }
 }

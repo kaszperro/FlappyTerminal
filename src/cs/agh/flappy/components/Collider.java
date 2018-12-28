@@ -12,6 +12,13 @@ public class Collider extends GameComponent {
     private float height;
     private Consumer<Collider> onCollision;
 
+    public Collider(float width, float height) {
+        anchor = new Position(0, 0);
+        this.width = width;
+        this.height = height;
+        this.onCollision = null;
+    }
+
     public Collider(Consumer<Collider> onCollision, float width, float height) {
         anchor = new Position(0, 0);
         this.width = width;
@@ -54,17 +61,16 @@ public class Collider extends GameComponent {
         float otherWidth = other.getWidth();
         float otherHeight = other.getHeight();
 
-        Position myTopRight = myPosition.add(width / 2, height / 2);
-        Position myBotLeft = myPosition.sub(width / 2, height / 2);
+        Position myTopRight = myPosition.add(width - 1, height - 1);
 
-        Position otherTopRight = otherPosition.add(otherWidth / 2, otherHeight / 2);
-        Position otherBotLeft = otherPosition.sub(otherWidth / 2, otherHeight / 2);
+        Position otherTopRight = otherPosition.add(otherWidth - 1, otherHeight - 1);
 
 
-        if (myTopRight.getY() < otherBotLeft.getY() || myBotLeft.getY() > otherTopRight.getY())
+        if (myTopRight.getY() < otherPosition.getY() || myPosition.getY() > otherTopRight.getY())
             return false;
 
-        return !(myTopRight.getX() < otherBotLeft.getX()) && !(myBotLeft.getX() > otherTopRight.getX());
+        return !(myTopRight.getX() < otherPosition.getX()) && !(myPosition.getX() > otherTopRight.getX());
+
     }
 
     @Override
@@ -79,12 +85,15 @@ public class Collider extends GameComponent {
 
     @Override
     public void update() {
-        List<Collider> colliderList = getGameObject().getScene().getComponentsOfType(Collider.class);
-        for (Collider other : colliderList) {
-            if (other.equals(this))
-                continue;
-            if (collides(other))
-                onCollision.accept(other);
+        if (onCollision != null) {
+            List<Collider> colliderList = getGameObject().getScene().getComponentsOfType(Collider.class);
+            for (Collider other : colliderList) {
+                if (other.equals(this))
+                    continue;
+                if (collides(other))
+                    onCollision.accept(other);
+            }
         }
+
     }
 }

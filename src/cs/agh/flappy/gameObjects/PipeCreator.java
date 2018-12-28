@@ -1,8 +1,9 @@
 package cs.agh.flappy.gameObjects;
 
 import cs.agh.flappy.Position;
-import cs.agh.flappy.Scene;
+import cs.agh.flappy.scenes.Scene;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +32,9 @@ public class PipeCreator extends GameObject {
     public void start() {
         mainCamera = getScene().getCamera();
         myScene = getScene();
+
     }
+
 
     private int randomRange(int start, int end) {
         return myRandom.nextInt(end - start + 1) + start;
@@ -44,7 +47,7 @@ public class PipeCreator extends GameObject {
             lastPos = pipeList.get(pipeList.size() - 1).getPosition().getX();
         }
         if (lastPos <= mainCamera.getWidth() + mainCamera.getPosition().getX()) {
-            int mySpacePos = randomRange(margin+pipesSpaceY, mainCamera.getHeight() - margin);
+            int mySpacePos = randomRange(margin + pipesSpaceY, mainCamera.getHeight() - margin);
 
             int botSpace = mySpacePos - pipesSpaceY;
             Pipe newTopPipe = new Pipe(pipesWidth, mainCamera.getHeight() - mySpacePos);
@@ -56,8 +59,20 @@ public class PipeCreator extends GameObject {
             newBotPipe.setPosition(new Position(newXPos, 0));
 
             pipeList.add(newBotPipe);
+            pipeList.add(newTopPipe);
             myScene.addGameObject(newTopPipe);
             myScene.addGameObject(newBotPipe);
+        }
+
+
+        for (Iterator<Pipe> iter = pipeList.listIterator(); iter.hasNext(); ) {
+            Pipe a = iter.next();
+            if (a.getPosition().getX() + pipesWidth < mainCamera.getPosition().getX()) {
+                a.destroy();
+                iter.remove();
+            } else {
+                break;
+            }
         }
     }
 }
