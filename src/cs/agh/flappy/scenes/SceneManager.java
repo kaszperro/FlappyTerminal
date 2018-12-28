@@ -67,28 +67,39 @@ public class SceneManager {
             Scene currentScene = sceneRunner.myScene;
             terminal.writer().print(ansi().cursorUp(currentScene.getCamera().getHeight()).
                     cursorLeft(currentScene.getCamera().getWidth()));
-
         }
-
 
         stopScene();
         startScene(newScene);
     }
 
 
+    private String hideCursor() {
+        return "\u001b[?25l";
+    }
+
+    private String showCursor() {
+        return "\u001b[?25h";
+    }
+
     public SceneManager() throws IOException {
+
         AnsiConsole.systemInstall();
         Terminal terminal = TerminalBuilder.builder()
                 .jna(true)
                 .system(true)
                 .build();
         terminal.enterRawMode();
-
         this.terminal = terminal;
+        terminal.writer().print(hideCursor());
 
         input = new Input(terminal.reader());
         Thread inputThread = new Thread(input);
         inputThread.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.print(showCursor()); //show cursor on end
+        }));
     }
 
     public Input getInput() {

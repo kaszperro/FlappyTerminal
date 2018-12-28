@@ -16,21 +16,30 @@ public class Label extends GameObject {
         }
     };
 
+    private RectangularRenderer renderer;
+
     public Label(String text) {
         this.text = text;
-        RectangularRenderer renderer = new RectangularRenderer(
-                text.length(),
-                1,
-                myRender
-        );
-        addComponent(renderer);
+        createRenderer();
     }
 
     public int getWidth() {
         return text.length();
     }
 
+    private void createRenderer() {
+        renderer = new RectangularRenderer(
+                text.length(),
+                1,
+                myRender
+        );
+
+        addComponent(renderer);
+    }
+
+
     public void setText(String text) {
         this.text = text;
+        renderer.setWidth(getWidth());
     }
 }

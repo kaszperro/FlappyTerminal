@@ -31,6 +31,10 @@ public class RectangularRenderer extends Renderer {
         this.renderFunc = renderFunc;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
 
     @Override
     public boolean isPositionInside(Position relativePosition) {

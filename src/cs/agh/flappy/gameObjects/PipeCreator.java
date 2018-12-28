@@ -32,12 +32,26 @@ public class PipeCreator extends GameObject {
     public void start() {
         mainCamera = getScene().getCamera();
         myScene = getScene();
-
     }
-
 
     private int randomRange(int start, int end) {
         return myRandom.nextInt(end - start + 1) + start;
+    }
+
+    public Pipe getOverPipe(double xPos) {
+        for (Pipe pipe : pipeList) {
+            if (pipe.getPosition().getX() <= xPos && pipe.getPosition().getX() + pipe.getWidth() >= xPos)
+                return pipe;
+        }
+        return null;
+    }
+
+    public boolean overPipe(float xPos) {
+        for (Pipe pipe : pipeList) {
+            if (pipe.getPosition().getX() == xPos)
+                return true;
+        }
+        return false;
     }
 
     @Override

@@ -4,10 +4,11 @@ import cs.agh.flappy.Position;
 import cs.agh.flappy.scenes.Scene;
 import cs.agh.flappy.components.GameComponent;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class GameObject {
+public class GameObject {
     private List<GameComponent> componentsList = new LinkedList<>();
     private Position position = new Position();
     private Scene scene = null;
@@ -65,6 +66,10 @@ public abstract class GameObject {
 
     public int getzPos() {
         return zPos;
+    }
+
+    public <T extends GameComponent> void removeComponent(Class<T> myClass) {
+        componentsList.removeIf(component -> myClass.isInstance(component.getClass()));
     }
 }
 

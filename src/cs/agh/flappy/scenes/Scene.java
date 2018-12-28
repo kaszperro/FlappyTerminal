@@ -55,7 +55,7 @@ public class Scene {
         gameObjectsToDestroy.removeIf(gameObject -> gameObjectsList.remove(gameObject));
     }
 
-    public <T extends GameObject> List<T> getGameObjectOfType(Class<T> myClass) {
+    public <T extends GameObject> List<T> getGameObjectsOfType(Class<T> myClass) {
         List<T> returnList = new LinkedList<>();
         for (GameObject object : gameObjectsList) {
             if (myClass.isInstance(object)) {
