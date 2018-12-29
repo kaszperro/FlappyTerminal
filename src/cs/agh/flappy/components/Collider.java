@@ -8,25 +8,25 @@ import java.util.function.Consumer;
 
 public class Collider extends GameComponent {
     private Position anchor;
-    private float width;
-    private float height;
+    private int width;
+    private int height;
     private Consumer<Collider> onCollision;
 
-    public Collider(float width, float height) {
+    public Collider(int width, int height) {
         anchor = new Position(0, 0);
         this.width = width;
         this.height = height;
         this.onCollision = null;
     }
 
-    public Collider(Consumer<Collider> onCollision, float width, float height) {
+    public Collider(Consumer<Collider> onCollision, int width, int height) {
         anchor = new Position(0, 0);
         this.width = width;
         this.height = height;
         this.onCollision = onCollision;
     }
 
-    Collider(Consumer<Collider> onCollision, float width, float height, Position anchor) {
+    Collider(Consumer<Collider> onCollision, int width, int height, Position anchor) {
         this.anchor = anchor;
         this.width = width;
         this.height = height;
@@ -38,19 +38,19 @@ public class Collider extends GameComponent {
         return new Position(anchor);
     }
 
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(float width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -58,13 +58,13 @@ public class Collider extends GameComponent {
     public boolean collides(Collider other) {
         Position myPosition = this.getGameObject().getWordPosition().add(anchor);
         Position otherPosition = other.getGameObject().getWordPosition().add(other.getAnchor());
-        float otherWidth = other.getWidth();
-        float otherHeight = other.getHeight();
+        int otherWidth = other.getWidth();
+        int otherHeight = other.getHeight();
 
         Position myTopRight = myPosition.add(width - 1, height - 1);
         Position otherTopRight = otherPosition.add(otherWidth - 1, otherHeight - 1);
 
-        if (otherPosition.getY() - myTopRight.getY() > 0.5 || myPosition.getY() - otherTopRight.getY() > 0.5)
+        if (otherPosition.getY() > myTopRight.getY() || myPosition.getY() > otherTopRight.getY())
             return false;
 
         return !(myTopRight.getX() < otherPosition.getX()) && !(myPosition.getX() > otherTopRight.getX());

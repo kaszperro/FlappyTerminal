@@ -1,6 +1,5 @@
 package cs.agh.flappy.components;
 
-import cs.agh.flappy.Game;
 import cs.agh.flappy.Position;
 import cs.agh.flappy.gameObjects.GameObject;
 

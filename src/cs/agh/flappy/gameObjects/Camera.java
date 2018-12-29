@@ -4,7 +4,6 @@ import cs.agh.flappy.Position;
 import cs.agh.flappy.scenes.Scene;
 import cs.agh.flappy.components.Renderer;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Camera extends GameObject {
@@ -32,8 +31,8 @@ public class Camera extends GameObject {
         StringBuilder builder = new StringBuilder();
         for (int h = 1; h <= height; ++h) {
             for (int w = 0; w < width; ++w) {
-                double x = w + getWordPosition().getX();
-                double y = height - h + getWordPosition().getY();
+                int x = w + getWordPosition().getX();
+                int y = height - h + getWordPosition().getY();
 
                 char myChar = ' ';
                 int zPos = -1;

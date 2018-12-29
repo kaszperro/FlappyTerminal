@@ -1,14 +1,14 @@
 package cs.agh.flappy;
 
 public class Position {
-    private final double x;
-    private final double y;
+    private final int x;
+    private final int y;
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
@@ -17,7 +17,7 @@ public class Position {
         this.y = 0;
     }
 
-    public Position(double x, double y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -51,7 +51,7 @@ public class Position {
         return add(other.getX(), other.getY());
     }
 
-    public Position add(double x, double y) {
+    public Position add(int x, int y) {
         return new Position(x + this.x, y + this.y);
     }
 
@@ -59,7 +59,7 @@ public class Position {
         return sub(other.getX(), other.getY());
     }
 
-    public Position sub(double x, double y) {
+    public Position sub(int x, int y) {
         return new Position(this.x - x, this.y - y);
     }
 

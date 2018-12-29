@@ -56,7 +56,7 @@ public class PipeCreator extends GameObject {
 
     @Override
     protected void update(double delta) {
-        double lastPos = mainCamera.getWidth() + mainCamera.getPosition().getX();
+        int lastPos = mainCamera.getWidth() + mainCamera.getPosition().getX();
         if (!pipeList.isEmpty()) {
             lastPos = pipeList.get(pipeList.size() - 1).getPosition().getX();
         }
@@ -67,7 +67,7 @@ public class PipeCreator extends GameObject {
             Pipe newTopPipe = new Pipe(pipesWidth, mainCamera.getHeight() - mySpacePos);
             Pipe newBotPipe = new Pipe(pipesWidth, botSpace);
 
-            double newXPos = lastPos + pipesSpaceX + pipesWidth;
+            int newXPos = lastPos + pipesSpaceX + pipesWidth;
 
             newTopPipe.setPosition(new Position(newXPos, mySpacePos));
             newBotPipe.setPosition(new Position(newXPos, 0));
