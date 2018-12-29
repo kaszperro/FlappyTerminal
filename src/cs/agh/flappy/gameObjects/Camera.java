@@ -34,8 +34,8 @@ public class Camera extends GameObject {
                 int x = w + getWordPosition().getX();
                 int y = height - h + getWordPosition().getY();
 
-                char myChar = ' ';
-                int zPos = -1;
+                String myChar = " ";
+                int zPos = -10;
 
                 for (Renderer renderer : rendererList) {
                     GameObject gameObject = renderer.getGameObject();

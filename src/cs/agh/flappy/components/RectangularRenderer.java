@@ -9,7 +9,7 @@ public class RectangularRenderer extends Renderer {
     private int width;
     private int height;
 
-    private Function<Position, Character> renderFunc = position -> '*';
+    private Function<Position, String> renderFunc = position -> "*";
 
     RectangularRenderer(int width, int height, Position anchor) {
         super(anchor);
@@ -24,7 +24,7 @@ public class RectangularRenderer extends Renderer {
         this.height = height;
     }
 
-    public RectangularRenderer(int width, int height, Function<Position, Character> renderFunc) {
+    public RectangularRenderer(int width, int height, Function<Position, String> renderFunc) {
         super(new Position(0, 0));
         this.width = width;
         this.height = height;
@@ -45,7 +45,7 @@ public class RectangularRenderer extends Renderer {
     }
 
     @Override
-    public char getCharAtPosition(Position relativePosition) {
+    public String getCharAtPosition(Position relativePosition) {
         return renderFunc.apply(relativePosition);
     }
 

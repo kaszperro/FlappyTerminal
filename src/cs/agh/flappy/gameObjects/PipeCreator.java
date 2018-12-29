@@ -11,7 +11,7 @@ import java.util.Random;
 public class PipeCreator extends GameObject {
     private Camera mainCamera;
 
-    private List<Pipe> pipeList = new LinkedList<>();
+    private List<GameObject> pipeList = new LinkedList<>();
 
     private int pipesWidth;
     private int pipesSpaceX;
@@ -38,21 +38,14 @@ public class PipeCreator extends GameObject {
         return myRandom.nextInt(end - start + 1) + start;
     }
 
-    public Pipe getOverPipe(double xPos) {
-        for (Pipe pipe : pipeList) {
-            if (pipe.getPosition().getX() <= xPos && pipe.getPosition().getX() + pipe.getWidth() >= xPos)
+    public GameObject getOverPipe(double xPos) {
+        for (GameObject pipe : pipeList) {
+            if (pipe.getPosition().getX() <= xPos && pipe.getPosition().getX() + pipesWidth >= xPos)
                 return pipe;
         }
         return null;
     }
 
-    public boolean overPipe(float xPos) {
-        for (Pipe pipe : pipeList) {
-            if (pipe.getPosition().getX() == xPos)
-                return true;
-        }
-        return false;
-    }
 
     @Override
     protected void update(double delta) {
@@ -64,8 +57,8 @@ public class PipeCreator extends GameObject {
             int mySpacePos = randomRange(margin + pipesSpaceY, mainCamera.getHeight() - margin);
 
             int botSpace = mySpacePos - pipesSpaceY;
-            Pipe newTopPipe = new Pipe(pipesWidth, mainCamera.getHeight() - mySpacePos);
-            Pipe newBotPipe = new Pipe(pipesWidth, botSpace);
+            TopPipe newTopPipe = new TopPipe(pipesWidth, mainCamera.getHeight() - mySpacePos);
+            BottomPipe newBotPipe = new BottomPipe(pipesWidth, botSpace);
 
             int newXPos = lastPos + pipesSpaceX + pipesWidth;
 
@@ -79,8 +72,8 @@ public class PipeCreator extends GameObject {
         }
 
 
-        for (Iterator<Pipe> iter = pipeList.listIterator(); iter.hasNext(); ) {
-            Pipe a = iter.next();
+        for (Iterator<GameObject> iter = pipeList.listIterator(); iter.hasNext(); ) {
+            GameObject a = iter.next();
             if (a.getPosition().getX() + pipesWidth < mainCamera.getWordPosition().getX()) {
                 a.destroy();
                 iter.remove();

@@ -10,12 +10,14 @@ import cs.agh.flappy.scenes.GameOverScene;
 
 import java.util.function.Consumer;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 public class Bird extends GameObject {
     private Input input;
     private PipeCreator pipeCreator;
     private Label scoreLabel;
     private int score;
-    private Pipe currentPipe = null;
+    private GameObject currentPipe = null;
 
     private int width;
     private int height;
@@ -47,7 +49,7 @@ public class Bird extends GameObject {
 
         Collider collider = new Collider(onCollide, width, height);
         addComponent(collider);
-        RectangularRenderer renderer = new RectangularRenderer(width, height);
+        RectangularRenderer renderer = new RectangularRenderer(width, height, position -> ansi().fgBrightYellow().a("#").toString());
         addComponent(renderer);
         myGravity = new Gravity(6);
         addComponent(myGravity);
@@ -61,13 +63,12 @@ public class Bird extends GameObject {
     protected void update(double delta) {
         if (input.getPressed() == 65) {
             accumulation += delta * 15;
-            Position prevPos = getPosition();
             setPosition(getPosition().add(0, (int) accumulation));
             accumulation -= (int) accumulation;
             myGravity.resetGravity();
         }
 
-        Pipe newPipe = pipeCreator.getOverPipe(getWordPosition().getX());
+        GameObject newPipe = pipeCreator.getOverPipe(getWordPosition().getX());
         if (newPipe != null && newPipe != currentPipe) {
             score += 1;
         }

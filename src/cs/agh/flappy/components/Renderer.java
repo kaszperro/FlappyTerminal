@@ -16,6 +16,6 @@ public abstract class Renderer extends GameComponent {
 
     public abstract boolean isPositionInside(Position relativePosition);
 
-    public abstract char getCharAtPosition(Position relativePosition);
+    public abstract String getCharAtPosition(Position relativePosition);
 
 }

@@ -9,10 +9,10 @@ import java.util.function.Function;
 public class Label extends GameObject {
     private String text;
 
-    private Function<Position, Character> myRender = new Function<Position, Character>() {
+    private Function<Position, String> myRender = new Function<Position, String>() {
         @Override
-        public Character apply(Position position) {
-            return text.charAt((int) position.getX());
+        public String apply(Position position) {
+            return String.valueOf(text.charAt((int) position.getX()));
         }
     };
 
